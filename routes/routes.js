@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 // Importar los controladores
-const usuarioController = require('./controllers/usuarioController');
-const encuestaController = require('./controllers/encuestaController');
-const preguntaController = require('./controllers/preguntaController');
-const respuestaController = require('./controllers/respuestaController');
-const encuestadoController = require('./controllers/encuestadoController');
-const analisisController = require('./controllers/analisisController');
+const usuarioController = require('../controllers/usuarioController');
+const encuestaController = require('../controllers/encuestaController');
+const preguntaController = require('../controllers/preguntaController');
+const respuestaController = require('../controllers/respuestaController');
+const encuestadoController = require('../controllers/encuestadoController');
+const analisisController = require('../controllers/analisisController');
 
 // Rutas para Usuarios
 router.get('/users', usuarioController.listUsers);
