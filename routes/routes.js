@@ -11,7 +11,7 @@ const analisisController = require('../controllers/analisisController');
 
 // Rutas para Usuarios
 router.get('/users', usuarioController.listUsers);
-router.get('/users/:id', usuarioController.getUserById);
+//router.get('/users/:id', usuarioController.getUserById);
 router.put('/users/:id', usuarioController.updateUser);
 router.delete('/users/:id', usuarioController.deleteUser);
 
@@ -30,8 +30,10 @@ router.put('/surveys/:id/questions/:questionId', preguntaController.updateQuesti
 router.delete('/surveys/:id/questions/:questionId', preguntaController.deleteQuestion);
 
 // Rutas para Respuestas de Encuestas
-router.post('/surveys/:id/responses', respuestaController.addResponse);
-router.get('/surveys/:id/responses', respuestaController.listResponses);
+//router.post('/surveys/:id/responses', respuestaController.addResponse);
+//router.get('/surveys/:id/responses', respuestaController.listResponses);
+router.post('/responses', respuestaController.addResponse); // Endpoint para agregar respuestas
+//router.get('/responses', respuestaController.listAllResponses);  // Endpoint para obtener todas las respuestas
 
 // Rutas para Encuestados
 router.post('/respondents', encuestadoController.addRespondent);

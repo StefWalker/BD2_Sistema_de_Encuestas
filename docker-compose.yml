@@ -10,32 +10,45 @@ services:
     depends_on:
       - postgresql
       - redis
+      - mongo
+    environment:
+      DBPS_PORT: 5432  # Configuración para PostgreSQL
+      DBPS_NAME: 'mydatabase'
+      DBPS_USER: 'myuser'
+      DBPS_PASSWORD: 'mypassword'
+      DBM_HOST: 'mongo'  # Configuración para MongoDB
+      DBM_PORT: 27017
+      DBM_NAME: 'nombreBD'
+      DBM_USER: 'root'
+      DBM_PASSWORD: 'example'
 
   mongo:
     image: mongo
     restart: always
     ports:
-      - 27017:27017
+      - "27017:27017"  # Puerto para MongoDB
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: 'root'
+      MONGO_INITDB_ROOT_PASSWORD: 'example'
+    volumes:
+      - mongodb_data:/data/db  # Almacenamiento persistente para MongoDB
 
   mongo-express:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - "8081:8081"  # Puerto para Mongo Express
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: 'root'
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 'example'
+      ME_CONFIG_MONGODB_URL: 'mongodb://root:example@mongo:27017/'
 
   postgresql:
     image: postgres
     environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: 'mydatabase'
+      POSTGRES_USER: 'myuser'
+      POSTGRES_PASSWORD: 'mypassword'
     ports:
       - "5432:5432"
     volumes:
@@ -44,9 +57,7 @@ services:
   redis:
     image: redis
     ports:
-      - "6379:6379"
-    environment:
-      - HOST=redisHost
+      - "6379:6379"  # Puerto para Redis
 
 volumes:
   mongodb_data:

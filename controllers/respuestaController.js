@@ -1,26 +1,38 @@
-const { Respuesta } = require('../models');
+const { MongoClient } = require('mongodb');
 
-exports.addResponse = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { body } = req;
+const uri = `mongodb://${process.env.DBM_USER}:${process.env.DBM_PASSWORD}@${process.env.DBM_HOST}:${process.env.DBM_PORT}/${process.env.DBM_NAME}`;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    const response = await Respuesta.create({ ...body, encuestaId: id });
-
-    res.status(201).json(response);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al añadir respuesta', error });
+async function ensureConnection() {
+  if (!client.isConnected()) {
+    await client.connect();
   }
-};
+}
 
-exports.listResponses = async (req, res) => {
+async function addResponse(req, res) {
   try {
-    const { id } = req.params;
+    console.log("Intentando agregar respuesta");
+    console.log("Datos recibidos:", req.body);
 
-    const responses = await Respuesta.findAll({ where: { encuestaId: id } });
+    await ensureConnection(); // Asegúrate de que la conexión esté abierta
+    console.log("Conexión asegurada");
 
-    res.status(200).json(responses);
+    const collection = client.db().collection('responses');
+    const newResponse = {
+      respondentId: req.body.respondentId,
+      responses: req.body.responses,
+      surveyId: req.body.surveyId || null,
+      timestamp: new Date(),
+    };
+
+    const result = await collection.insertOne(newResponse);
+    res.status(201).json({ insertedId: result.insertedId });
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener respuestas', error });
+    console.error("Error al agregar respuesta:", error);
+    res.status(500).json({ message: 'Error adding response' });
   }
+}
+
+module.exports = {
+  addResponse
 };
